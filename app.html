@@ -8,188 +8,409 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <style>
+        .hide-scrollbar {
+            -ms-overflow-style: none;  /* Internet Explorer 10+ */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;  /* Safari and Chrome */
+        }
+    </style>
 </head>
 <body class="bg-[#111727] text-white font-poppins">
-    <div id="container-player" class="flex flex-row  items-center justify-center h-screen">
-        
-        <div id="playlist" class="w-1/4 border h-screen p-6">
-            <h1>SONGS:</h1>
-            <ul class="list-none p-0">
-                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
-                    <i class="fas fa-music text-blue-400"></i>
-                    Song 1
+    <div id="container-player" class="flex flex-col md:flex-row w-full h-screen">
+
+        <!-- Playlist - Oculta em mobile por padrão -->
+        <div id="playlist" class="hidden md:block w-full md:w-1/4 bg-[#111727] h-screen p-6">
+            <h1 class="text-white text-xl font-bold mb-6">Playlist</h1>
+            
+            <!-- Menu de navegação -->
+            <ul class="list-none p-0 mb-6 mt-4">
+                <li id="myplaylist" class="flex items-center gap-3 text-blue-400 font-semibold text-sm hover:cursor-pointer hover:text-blue-300 transition-colors py-2">
+                    <i class="fas fa-music text-blue-400 hover:text-blue-300 transition-colors"></i>
+                    My Playlist
                 </li>
-                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
-                    <i class="fas fa-music text-blue-400"></i>
-                    Black Holes and Revelations
+                <li id="lastListening" class="flex items-center gap-3 text-gray-400 font-semibold text-sm hover:cursor-pointer hover:text-blue-400 transition-colors py-2">
+                    <i class="fas fa-clock text-gray-400 hover:text-blue-400 transition-colors"></i>
+                    Last Listening
                 </li>
-                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
-                    <i class="fas fa-music text-blue-400"></i>
-                    Invincible
+                <li id="recommended" class="flex items-center gap-3 text-gray-400 font-semibold text-sm hover:cursor-pointer hover:text-blue-400 transition-colors py-2">
+                    <i class="fas fa-star text-gray-400 hover:text-blue-400 transition-colors"></i>
+                    Recommended
                 </li>
-                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
-                    <i class="fas fa-music text-blue-400"></i>
-                    Knights of Cydonia
-                </li>
-                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
-                    <i class="fas fa-music text-blue-400"></i>
-                    Hysteria
-                </li>
-                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
-                    <i class="fas fa-music text-blue-400"></i>
-                    Simulation Theory
-                </li>
+            </ul>
+
+            <!-- Lista de músicas -->
+            <ul id="music-list" class="list-none p-0 space-y-3 overflow-y-auto max-h-[calc(100vh-300px)] hide-scrollbar">
+                <!-- As músicas serão inseridas aqui via JavaScript -->
             </ul>
         </div>
 
-        <div id="principal" class="h-screen border relative z-10" style="background-image: url(/assets/band.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
+        <div id="principal" class="flex-1 h-screen relative z-10 pb-24 md:pb-0" style="background-image: url(/assets/band.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
             <div id="degrade" class="z-20 absolute inset-0 bg-gradient-to-b from-transparent to-[#111727]"></div>
-            <nav id="navbar" class="flex flex-row justify-between items-center   px-10 pt-2 items-center">
-                <ul class="flex space-x-4 z-30">
-                    <li><a href="#">DISCOVER</a></li>
-                    <li><a href="#">MY LIBRARY</a></li>
-                    <li><a href="#">RADIO</a></li>
-                </ul>
-                <div id="search-bar" class="mt-4 z-30">
-                    <input type="text" placeholder="Search..." class="min-w-[400px] p-2 bg-gray-800 border border-gray-600 rounded transition-all text-sm">
+            
+            <!-- Navbar móvel -->
+            <nav id="navbar" class="flex flex-row justify-between items-center px-4 md:px-10 py-4 relative z-30">
+                <!-- Menu hamburger para mobile -->
+                <div class="md:hidden flex items-center gap-4">
+                    <i id="menu-toggle" class="fas fa-bars text-white text-xl cursor-pointer"></i>
+                    <i class="fas fa-search text-white text-lg cursor-pointer"></i>
                 </div>
-                <div id="perfil">
-                    <img src="https://m.media-amazon.com/images/I/81Yb6FQkTSL.png" alt="Foto de perfil do Usuário" class="rounded-full w-10 h-10 mt-4 z-30">
+                
+                <!-- Menu desktop -->
+                <ul class="hidden md:flex space-x-4">
+                    <li><a href="#" class="font-semibold text-sm md:text-base">DISCOVER</a></li>
+                    <li><a href="#" class="font-semibold text-sm md:text-base">MY LIBRARY</a></li>
+                    <li><a href="#" class="font-semibold text-sm md:text-base">RADIO</a></li>
+                </ul>
+                
+                <!-- Search bar -->
+                <div id="search-bar" class="hidden md:block relative z-30">
+                    <input type="text" placeholder="Search..." class="min-w-[250px] lg:min-w-[400px] p-2 bg-gray-800 border border-gray-600 rounded transition-all text-sm">
+                </div>
+                
+                <!-- User profile -->
+                <div class="flex flex-row items-center gap-2 md:gap-4">
+                    <i class="hidden md:block fas fa-bell text-white text-lg hover:cursor-pointer hover:opacity-80 hover:scale-105 transition-all" aria-label="Notifications"></i>
+                    <i class="hidden md:block fas fa-cog text-white text-lg hover:cursor-pointer hover:opacity-80 hover:scale-105 transition-all" aria-label="Settings"></i>
+                    <img src="https://m.media-amazon.com/images/I/81Yb6FQkTSL.png" alt="Foto de perfil do Usuário" class="rounded-full w-8 h-8 md:w-10 md:h-10">
                 </div>
             </nav>
-            <div id="description" class="px-10 pt-5 pb-4 relative z-30 text-slate-300">
-                    <h1 class="text-3xl font-bold py-2">Muse</h1>
-                    <p class="text-sm max-w-lg">Muse is a British rock band formed in 1994. Known for their eclectic style and energetic live performances, they have released several critically acclaimed albums.</p>
+            
+            <!-- Description -->
+            <div id="description" class="px-4 md:px-10 pt-6 md:pt-10 pb-4 relative z-30 text-slate-300">
+                <h1 class="text-2xl md:text-3xl font-bold py-2">Muse</h1>
+                <p class="text-xs md:text-sm max-w-lg">Muse is a British rock band formed in 1994. Known for their eclectic style and energetic live performances, they have released several critically acclaimed albums.</p>
             </div>
-            <div class="px-10 relative z-30 flex lfex-col gap-4">
-                <button class="bg-blue-500 text-white py-2 px-4 rounded hover:cursor-pointer hover:opacity-80 hover:scale-105 transition-all">PLAY</button>
-                <button class="bg-gray-500 text-white py-2 px-4 rounded hover:cursor-pointer hover:opacity-80 hover:scale-105 transition-all">FOLLOW</button>
-                <i class="far fa-heart text-white text-4xl inline-block h-10 hover:cursor-pointer hover:opacity-80 hover:scale-105 transition-all" aria-label="Favorite"></i>
-                <script>
-                    const heartIcon = document.querySelector('.fa-heart');
-                    heartIcon.addEventListener('click', () => {
-                        heartIcon.classList.toggle('far');
-                        heartIcon.classList.toggle('fas');
-                        heartIcon.classList.toggle('text-red-500');
-                        heartIcon.classList.toggle('text-white');
-                    });
-                </script>
+            
+            <!-- Action buttons -->
+            <div class="px-4 md:px-10 relative z-30 flex flex-row gap-3 md:gap-4">
+                <button class="bg-blue-500 text-white py-2 px-3 md:px-4 rounded hover:cursor-pointer hover:opacity-80 hover:scale-105 transition-all text-sm md:text-base">PLAY</button>
+                <button class="bg-gray-500 text-white py-2 px-3 md:px-4 rounded hover:cursor-pointer hover:opacity-80 hover:scale-105 transition-all text-sm md:text-base">FOLLOW</button>
+                <i class="far fa-heart text-white text-2xl md:text-4xl inline-block h-8 md:h-10 hover:cursor-pointer hover:opacity-80 hover:scale-105 transition-all" aria-label="Favorite"></i>
             </div>
-            <div class="relative z-30 px-10 pt-4 overflow-x-hidden">
-                <h2 class="text-base font-semibold pb-3">Popular Albums</h2>
-                <div id="Albums" class="flex flex-row gap-6 overflow-x-auto">
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=1" alt="Absolution" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+            
+            <div class="relative pb-20 z-30 px-4 md:px-10 pt-6 md:pt-10 overflow-x-hidden">
+                <!-- Layout para mobile (escondido em telas grandes) -->
+                <div class="h-block md:hidden">
+                    <!-- Popular Albums para mobile -->
+                    <div class="mb-8">
+                        <h2 class="text-lg font-semibold pb-3">Popular Albums</h2>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-full aspect-square object-cover rounded-lg hover:scale-105 transition-all hover:cursor-pointer">
+                                <h3 class="text-sm font-medium mt-2">Absolution</h3>
+                                <h4 class="text-xs text-gray-400">2003</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/pt/8/8f/BHARCOVER.jpg" alt="Black Holes" class="aspect-square object-cover rounded-lg hover:scale-105 transition-all hover:cursor-pointer">
+                                <h3 class="text-sm font-medium mt-2">Black Holes</h3>
+                                <h4 class="text-xs text-gray-400">2006</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/pt/8/8a/Theresistance.jpg" alt="The Resistance" class="w-full aspect-square object-cover rounded-lg hover:scale-105 transition-all hover:cursor-pointer">
+                                <h3 class="text-sm font-medium mt-2">The Resistance</h3>
+                                <h4 class="text-xs text-gray-400">2009</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/en/3/35/Muse_-_Origin_of_Symmetry_cover_art.png" alt="Origin of Symmetry" class="w-full aspect-square object-cover rounded-lg hover:scale-105 transition-all hover:cursor-pointer">
+                                <h3 class="text-sm font-medium mt-2">Origin of Symmetry</h3>
+                                <h4 class="text-xs text-gray-400">2001</h4>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=2" alt="Black Holes" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all rounded-lg hover:cursor-pointer">
-                        <h3 class="text-sm">Black Holes</h3>
-                        <h4 class="text-xs text-gray-400">2006</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=3" alt="The Resistance" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">The Resistance</h3>
-                        <h4 class="text-xs text-gray-400">2009</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=4" alt="Origin of Symmetry" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Origin of Symmetry</h3>
-                        <h4 class="text-xs text-gray-400">2001</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=5" alt="Simulation Theory" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Simulation Theory</h3>
-                        <h4 class="text-xs text-gray-400">2018</h4>
-                    </div>
-                
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=6" alt="Drones" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Drones</h3>
-                        <h4 class="text-xs text-gray-400">2015</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=7" alt="The 2nd Law" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">The 2nd Law</h3>
-                        <h4 class="text-xs text-gray-400">2012</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=8" alt="Showbiz" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Showbiz</h3>
-                        <h4 class="text-xs text-gray-400">1999</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=9" alt="Will of the People" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Will of the People</h3>
-                        <h4 class="text-xs text-gray-400">2022</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=10" alt="Hullabaloo" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Hullabaloo</h3>
-                        <h4 class="text-xs text-gray-400">2002</h4>
+
+                    <!-- Similar Artists para mobile -->
+                    <div class="mb-8">
+                        <h2 class="text-lg font-semibold pb-3">Similar Artists</h2>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center gap-3">
+                                <img src="https://lastfm.freetls.fastly.net/i/u/500x500/609fabac70a44e4aa7141bfb02fb43ee.jpg" alt="Radiohead" class="w-16 h-16 object-cover rounded-full hover:scale-105 transition-all hover:cursor-pointer">
+                                <div>
+                                    <h3 class="text-sm font-medium">Radiohead</h3>
+                                    <h4 class="text-xs text-gray-400">Band</h4>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <img src="https://blog.documentodoestudante.com.br/blog/wp-content/uploads/2022/04/historia-coldplay-1024x1024.jpg" alt="Coldplay" class="w-16 h-16 object-cover rounded-full hover:scale-105 transition-all hover:cursor-pointer">
+                                <div>
+                                    <h3 class="text-sm font-medium">Coldplay</h3>
+                                    <h4 class="text-xs text-gray-400">Band</h4>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <img src="https://i.discogs.com/YSYhf8n0KBdNDCBvqCl-wXmRQeg2VHOWfaov2tnbSsc/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTM5MTE3/MC0xNjc1ODg5MDYx/LTg1NDMucG5n.jpeg" alt="Arctic Monkeys" class="w-16 h-16 object-cover rounded-full hover:scale-105 transition-all hover:cursor-pointer">
+                                <div>
+                                    <h3 class="text-sm font-medium">Arctic Monkeys</h3>
+                                    <h4 class="text-xs text-gray-400">Band</h4>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <img src="https://lh3.googleusercontent.com/zm23SXI20lpXbZWpkwUxkdHWwe-0m7Bzz5vTmytnpsVcftkg-uwrtXGigDB5AQh5Rml_XfAf03oUDEI=w544-h544-p-l90-rj" alt="The Killers" class="w-16 h-16 object-cover rounded-full hover:scale-105 transition-all hover:cursor-pointer">
+                                <div>
+                                    <h3 class="text-sm font-medium">The Killers</h3>
+                                    <h4 class="text-xs text-gray-400">Band</h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="relative z-30 px-10 pt-4">
-                <h2 class="text-base font-semibold pb-3">Similar Artists</h2>
-                <div id="Albums" class="flex flex-row gap-6 overflow-x-auto">
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=11" alt="Radiohead" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">Radiohead</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
+                <!-- Layout para telas menores que 2xl (tablet/desktop) -->
+                <div class="hidden md:flex 2xl:hidden flex-col lg:flex-row gap-8">
+                    <!-- Popular Albums -->
+                    <div class="flex-1">
+                        <h2 class="text-base font-semibold pb-3">Popular Albums</h2>
+                        <div id="Albums" class="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+                            <div>
+                                <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-18 h-18 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm">Absolution</h3>
+                                <h4 class="text-xs text-gray-400">2003</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/pt/8/8f/BHARCOVER.jpg" alt="Black Holes" class="w-18 h-18 object-cover pb-1 hover:scale-105 transition-all rounded-lg hover:cursor-pointer">
+                                <h3 class="text-sm">Black Holes</h3>
+                                <h4 class="text-xs text-gray-400">2006</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/pt/8/8a/Theresistance.jpg" alt="The Resistance" class="w-18 h-18 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm">The Resistance</h3>
+                                <h4 class="text-xs text-gray-400">2009</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/en/3/35/Muse_-_Origin_of_Symmetry_cover_art.png" alt="Origin of Symmetry" class="w-18 h-18 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm">Origin of Symmetry</h3>
+                                <h4 class="text-xs text-gray-400">2001</h4>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=12" alt="Coldplay" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">Coldplay</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
+
+                    <!-- Similar Artists -->
+                    <div class="flex-1 lg:border-l lg:border-t-0 border-t lg:pl-8 pt-8 lg:pt-0 border-gray-400">
+                        <h2 class="text-base font-semibold pb-3">Similar Artists</h2>
+                        <div id="Artists" class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div>
+                                <img src="https://lastfm.freetls.fastly.net/i/u/500x500/609fabac70a44e4aa7141bfb02fb43ee.jpg" alt="Radiohead" class="w-20 h-20 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Radiohead</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://blog.documentodoestudante.com.br/blog/wp-content/uploads/2022/04/historia-coldplay-1024x1024.jpg" alt="Coldplay" class="w-20 h-20 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Coldplay</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://i.discogs.com/YSYhf8n0KBdNDCBvqCl-wXmRQeg2VHOWfaov2tnbSsc/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTM5MTE3/MC0xNjc1ODg5MDYx/LTg1NDMucG5n.jpeg" alt="Arctic Monkeys" class="w-20 h-20 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Arctic Monkeys</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://lh3.googleusercontent.com/zm23SXI20lpXbZWpkwUxkdHWwe-0m7Bzz5vTmytnpsVcftkg-uwrtXGigDB5AQh5Rml_XfAf03oUDEI=w544-h544-p-l90-rj" alt="The Killers" class="w-20 h-20 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">The Killers</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=13" alt="Arctic Monkeys" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">Arctic Monkeys</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
+                </div>
+
+                <!-- Layout específico para telas 2xl+ (desktop) -->
+                <div class="hidden 2xl:block">
+                    <!-- Layout específico para telas 2xl+ (vertical) -->
+                <div class="hidden 2xl:block">
+                    <!-- Popular Albums para 2xl -->
+                    <div class="mb-12">
+                        <h2 class="text-xl font-semibold pb-4">Popular Albums</h2>
+                        <div id="Albums2xl" class="grid grid-cols-8 pt-4 ">
+                            <div>
+                                <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm font-medium">Absolution</h3>
+                                <h4 class="text-xs text-gray-400">2003</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/pt/8/8f/BHARCOVER.jpg" alt="Black Holes" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all rounded-lg hover:cursor-pointer">
+                                <h3 class="text-sm font-medium">Black Holes</h3>
+                                <h4 class="text-xs text-gray-400">2006</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/pt/8/8a/Theresistance.jpg" alt="The Resistance" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm font-medium">The Resistance</h3>
+                                <h4 class="text-xs text-gray-400">2009</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/en/3/35/Muse_-_Origin_of_Symmetry_cover_art.png" alt="Origin of Symmetry" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm font-medium">Origin of<br>Symmetry</h3>
+                                <h4 class="text-xs text-gray-400">2001</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/pt/a/a2/MuseDronesCapa.jpg" alt="Drones" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm font-medium">Drones</h3>
+                                <h4 class="text-xs text-gray-400">2015</h4>
+                            </div>
+                            <div>
+                                <img src="https://m.media-amazon.com/images/I/A1wul0PxQIL._UF894,1000_QL80_.jpg" alt="Simulation Theory" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm font-medium">Simulation<br> Theory</h3>
+                                <h4 class="text-xs text-gray-400">2018</h4>
+                            </div>
+                            <div>
+                                <img src="https://imusic.b-cdn.net/images/item/original/731/0190296383731.jpg?muse-2022-will-of-the-people-cd&class=scaled&v=1663677568" alt="Will of the People" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm font-medium">Will of the<br> People</h3>
+                                <h4 class="text-xs text-gray-400">2022</h4>
+                            </div>
+                            <div>
+                                <img src="https://upload.wikimedia.org/wikipedia/pt/thumb/6/65/Muse_-_Showbiz.jpg/220px-Muse_-_Showbiz.jpg" alt="Showbiz" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                                <h3 class="text-sm font-medium">Showbiz</h3>
+                                <h4 class="text-xs text-gray-400">1999</h4>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Similar Artists para 2xl -->
                     <div>
-                        <img src="https://picsum.photos/80/80?random=14" alt="The Killers" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">The Killers</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
+                        <h2 class="text-xl font-semibold pb-4">Similar Artists</h2>
+                        <div id="Artists2xl" class="grid grid-cols-8 items-center">
+                            <div class="items-center">
+                                <img src="https://lastfm.freetls.fastly.net/i/u/500x500/609fabac70a44e4aa7141bfb02fb43ee.jpg" alt="Radiohead" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Radiohead</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://blog.documentodoestudante.com.br/blog/wp-content/uploads/2022/04/historia-coldplay-1024x1024.jpg" alt="Coldplay" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Coldplay</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://i.discogs.com/YSYhf8n0KBdNDCBvqCl-wXmRQeg2VHOWfaov2tnbSsc/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTM5MTE3/MC0xNjc1ODg5MDYx/LTg1NDMucG5n.jpeg" alt="Arctic Monkeys" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Arctic Monkeys</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://lh3.googleusercontent.com/zm23SXI20lpXbZWpkwUxkdHWwe-0m7Bzz5vTmytnpsVcftkg-uwrtXGigDB5AQh5Rml_XfAf03oUDEI=w544-h544-p-l90-rj" alt="The Killers" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">The Killers</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://i.scdn.co/image/ab6761610000517473edfbd970917913cfc647c7" alt="Queens of the Stone Age" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Queens of the<br>Stone Age</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://veja.abril.com.br/wp-content/uploads/2021/02/FOOFIGHTERS-PRESS-SONY-MUSIC-1.jpg.jpg?crop=1&resize=1212,909" alt="Foo Fighters" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Foo Fighters</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://m.media-amazon.com/images/I/A1re+XOm0QL._UF894,1000_QL80_.jpg" alt="Royal Blood" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Royal Blood</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                            <div>
+                                <img src="https://ligadoamusica.com.br/wp-content/uploads/2024/11/Franz-Ferdinand-2024.jpg" alt="Franz Ferdinand" class="w-24 h-24 object-cover pb-2 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                                <h3 class="text-sm font-medium">Franz Ferdinand</h3>
+                                <h4 class="text-xs text-gray-400">Band</h4>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=15" alt="Foo Fighters" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">Foo Fighters</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=16" alt="Red Hot Chili Peppers" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">RHCP</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=17" alt="Franz Ferdinand" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">Franz Ferdinand</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=18" alt="Kasabian" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">Kasabian</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=19" alt="The Strokes" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">The Strokes</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
-                    </div>
-                    <div>
-                        <img src="https://picsum.photos/80/80?random=20" alt="Royal Blood" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
-                        <h3 class="text-sm">Royal Blood</h3>
-                        <h4 class="text-xs text-gray-400">Band</h4>
-                    </div>
+                </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="player" class="h-64 w-full border "></div>
+    
+    <!-- Player - fixo no bottom para mobile -->
+    <div id="player" class="bg-gray-900 z-40 fixed md:absolute inset-x-0 bottom-0 h-20 md:h-[100px] w-full border-t border-gray-700 flex items-center justify-between px-3 md:px-6">
+        <!-- Player content adjusted for mobile -->
+        <div class="flex items-center gap-2 md:gap-4 w-1/3 md:w-1/4">
+            <img src="https://i.scdn.co/image/ab67616d0000b2738cb690f962092fd44bbe2bf4" alt="Capa do álbum" class="w-10 h-10 md:w-14 md:h-14 rounded object-cover">
+            <div class="flex flex-col min-w-0">
+                <h3 class="text-white text-xs md:text-sm font-medium truncate">Blackout</h3>
+                <p class="text-gray-400 text-xs truncate">Muse</p>
+            </div>
+            <i id="favoriteicon" class="hidden md:block far fa-heart text-white hover:scale-105 cursor-pointer text-lg ml-2"></i>
+        </div>
+
+        <!-- Controles centrais -->
+        <div class="flex flex-col items-center justify-center w-1/3 md:w-1/2">
+            <!-- Botões de controle -->
+            <div class="flex items-center gap-4 md:gap-6 mb-1 md:mb-2">
+                <i class="hidden md:block fas fa-random text-gray-400 hover:text-white cursor-pointer text-sm"></i>
+                <i class="fas fa-step-backward text-gray-400 hover:text-white cursor-pointer text-sm md:text-lg"></i>
+                <div class="bg-white rounded-full w-8 h-8 md:w-10 md:h-10 flex items-center justify-center hover:scale-105 cursor-pointer">
+                    <i class="fas fa-play text-black text-xs md:text-sm"></i>
+                </div>
+                <i class="fas fa-step-forward text-gray-400 hover:text-white cursor-pointer text-sm md:text-lg"></i>
+                <i class="hidden md:block fas fa-redo text-gray-400 hover:text-white cursor-pointer text-sm"></i>
+            </div>
+            
+            <!-- Barra de progresso -->
+            <div class="hidden md:flex items-center gap-3 w-full max-w-md">
+                <span class="text-gray-400 text-xs">2:40</span>
+                <div class="flex-1 bg-gray-600 h-1 rounded-full relative">
+                    <div class="bg-cyan-400 h-1 rounded-full w-1/3 relative">
+                        <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-cyan-400 rounded-full"></div>
+                    </div>
+                </div>
+                <span class="text-gray-400 text-xs">3:50</span>
+            </div>
+        </div>
+
+        <!-- Controles de volume (direita) -->
+        <div class="flex items-center gap-2 md:gap-4 w-1/3 md:w-1/4 justify-end">
+            <i class="hidden lg:block fas fa-list text-gray-400 hover:text-white cursor-pointer text-lg"></i>
+            <i class="hidden lg:block fas fa-desktop text-gray-400 hover:text-white cursor-pointer text-lg"></i>
+            <div class="hidden md:flex items-center gap-2">
+                <i class="fas fa-volume-up text-gray-400 hover:text-white cursor-pointer text-lg"></i>
+                <div class="bg-gray-600 h-1 w-16 lg:w-20 rounded-full relative">
+                    <div class="bg-cyan-400 h-1 rounded-full w-3/4 relative">
+                        <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-cyan-400 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+            <i class="md:hidden fas fa-ellipsis-v text-gray-400 cursor-pointer text-lg"></i>
+            <i class="hidden md:block fas fa-expand text-gray-400 hover:text-white cursor-pointer text-lg"></i>
+        </div>
+    </div>
+
+    <!-- Mobile playlist overlay -->
+    <div id="mobile-playlist" class="md:hidden fixed inset-0 bg-[#111727] z-50 transform -translate-x-full transition-transform duration-300">
+        <div class="flex items-center justify-between p-4 border-b border-gray-700">
+            <h2 class="text-xl font-bold">Playlist</h2>
+            <i id="close-playlist" class="fas fa-times text-xl cursor-pointer"></i>
+        </div>
+        <div class="p-4">
+            <!-- Menu de navegação mobile -->
+            <ul class="list-none p-0 mb-6">
+                <li class="flex items-center gap-3 text-blue-400 font-semibold text-sm py-3">
+                    <i class="fas fa-music text-blue-400"></i>
+                    My Playlist
+                </li>
+                <li class="flex items-center gap-3 text-gray-400 font-semibold text-sm py-3">
+                    <i class="fas fa-clock text-gray-400"></i>
+                    Last Listening
+                </li>
+                <li class="flex items-center gap-3 text-gray-400 font-semibold text-sm py-3">
+                    <i class="fas fa-star text-gray-400"></i>
+                    Recommended
+                </li>
+            </ul>
+            
+            <!-- Lista de músicas mobile -->
+            <ul id="mobile-music-list" class="list-none p-0 space-y-3 overflow-y-auto max-h-[calc(100vh-200px)]">
+                <!-- As músicas serão inseridas aqui via JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+<script src="functions.js"></script>
+<script>
+    // Mobile menu toggle
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+        document.getElementById('mobile-playlist').classList.remove('-translate-x-full');
+    });
+    
+    document.getElementById('close-playlist').addEventListener('click', function() {
+        document.getElementById('mobile-playlist').classList.add('-translate-x-full');
+    });
+</script>
 </body>
 </html>
