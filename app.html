@@ -12,15 +12,40 @@
 </head>
 <body class="bg-[#111727] text-white font-poppins">
     <div id="container-player" class="flex flex-row  items-center justify-center h-screen">
-        <div id="playlist" class="flex-grow-1 border h-screen p-4">
-            <h1>Playlist</h1>
+        
+        <div id="playlist" class="w-1/4 border h-screen p-6">
+            <h1>SONGS:</h1>
+            <ul class="list-none p-0">
+                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
+                    <i class="fas fa-music text-blue-400"></i>
+                    Song 1
+                </li>
+                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
+                    <i class="fas fa-music text-blue-400"></i>
+                    Black Holes and Revelations
+                </li>
+                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
+                    <i class="fas fa-music text-blue-400"></i>
+                    Invincible
+                </li>
+                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
+                    <i class="fas fa-music text-blue-400"></i>
+                    Knights of Cydonia
+                </li>
+                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
+                    <i class="fas fa-music text-blue-400"></i>
+                    Hysteria
+                </li>
+                <li class="hover:bg-gray-800 transition-colors cursor-pointer flex items-center gap-2">
+                    <i class="fas fa-music text-blue-400"></i>
+                    Simulation Theory
+                </li>
+            </ul>
         </div>
-        <div id="principal" class="flex-grow-4 h-screen border relative">
-            <div class="relative z-10">
-                <img src="https://wallpapercat.com/w/full/4/a/0/1383097-2048x1362-desktop-hd-muse-band-wallpaper.jpg" alt="Foto da Banda" class="opacity-50 object-contain w-full absolute ">
-            </div>
+
+        <div id="principal" class="h-screen border relative z-10" style="background-image: url(/assets/band.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
             <div id="degrade" class="z-20 absolute inset-0 bg-gradient-to-b from-transparent to-[#111727]"></div>
-            <nav id="navbar" class="flex flex-row justify-between items-center bg-gray-900 px-10 pt-2 items-center">
+            <nav id="navbar" class="flex flex-row justify-between items-center   px-10 pt-2 items-center">
                 <ul class="flex space-x-4 z-30">
                     <li><a href="#">DISCOVER</a></li>
                     <li><a href="#">MY LIBRARY</a></li>
@@ -35,7 +60,7 @@
             </nav>
             <div id="description" class="px-10 pt-5 pb-4 relative z-30 text-slate-300">
                     <h1 class="text-3xl font-bold py-2">Muse</h1>
-                    <p class="text-sm max-w-md">Muse is a British rock band formed in 1994. Known for their eclectic style and energetic live performances, they have released several critically acclaimed albums.</p>
+                    <p class="text-sm max-w-lg">Muse is a British rock band formed in 1994. Known for their eclectic style and energetic live performances, they have released several critically acclaimed albums.</p>
             </div>
             <div class="px-10 relative z-30 flex lfex-col gap-4">
                 <button class="bg-blue-500 text-white py-2 px-4 rounded hover:cursor-pointer hover:opacity-80 hover:scale-105 transition-all">PLAY</button>
@@ -51,64 +76,120 @@
                     });
                 </script>
             </div>
-            <div class="relative z-30 px-10 pt-4">
+            <div class="relative z-30 px-10 pt-4 overflow-x-hidden">
                 <h2 class="text-base font-semibold pb-3">Popular Albums</h2>
                 <div id="Albums" class="flex flex-row gap-6 overflow-x-auto">
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                        <img src="https://picsum.photos/80/80?random=1" alt="Absolution" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
                         <h3 class="text-sm">Absolution</h3>
                         <h4 class="text-xs text-gray-400">2003</h4>
                     </div>
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+                        <img src="https://picsum.photos/80/80?random=2" alt="Black Holes" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all rounded-lg hover:cursor-pointer">
+                        <h3 class="text-sm">Black Holes</h3>
+                        <h4 class="text-xs text-gray-400">2006</h4>
                     </div>
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+                        <img src="https://picsum.photos/80/80?random=3" alt="The Resistance" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                        <h3 class="text-sm">The Resistance</h3>
+                        <h4 class="text-xs text-gray-400">2009</h4>
                     </div>
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+                        <img src="https://picsum.photos/80/80?random=4" alt="Origin of Symmetry" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                        <h3 class="text-sm">Origin of Symmetry</h3>
+                        <h4 class="text-xs text-gray-400">2001</h4>
                     </div>
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+                        <img src="https://picsum.photos/80/80?random=5" alt="Simulation Theory" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                        <h3 class="text-sm">Simulation Theory</h3>
+                        <h4 class="text-xs text-gray-400">2018</h4>
                     </div>
                 
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+                        <img src="https://picsum.photos/80/80?random=6" alt="Drones" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                        <h3 class="text-sm">Drones</h3>
+                        <h4 class="text-xs text-gray-400">2015</h4>
                     </div>
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+                        <img src="https://picsum.photos/80/80?random=7" alt="The 2nd Law" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                        <h3 class="text-sm">The 2nd Law</h3>
+                        <h4 class="text-xs text-gray-400">2012</h4>
                     </div>
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+                        <img src="https://picsum.photos/80/80?random=8" alt="Showbiz" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                        <h3 class="text-sm">Showbiz</h3>
+                        <h4 class="text-xs text-gray-400">1999</h4>
                     </div>
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+                        <img src="https://picsum.photos/80/80?random=9" alt="Will of the People" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                        <h3 class="text-sm">Will of the People</h3>
+                        <h4 class="text-xs text-gray-400">2022</h4>
                     </div>
                     <div>
-                        <img src="https://www.vagalume.com.br/muse/discografia/absolution.webp" alt="Absolution" class="w-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
-                        <h3 class="text-sm">Absolution</h3>
-                        <h4 class="text-xs text-gray-400">2003</h4>
+                        <img src="https://picsum.photos/80/80?random=10" alt="Hullabaloo" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-lg">
+                        <h3 class="text-sm">Hullabaloo</h3>
+                        <h4 class="text-xs text-gray-400">2002</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative z-30 px-10 pt-4">
+                <h2 class="text-base font-semibold pb-3">Similar Artists</h2>
+                <div id="Albums" class="flex flex-row gap-6 overflow-x-auto">
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=11" alt="Radiohead" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">Radiohead</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=12" alt="Coldplay" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">Coldplay</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=13" alt="Arctic Monkeys" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">Arctic Monkeys</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=14" alt="The Killers" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">The Killers</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=15" alt="Foo Fighters" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">Foo Fighters</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=16" alt="Red Hot Chili Peppers" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">RHCP</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=17" alt="Franz Ferdinand" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">Franz Ferdinand</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=18" alt="Kasabian" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">Kasabian</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=19" alt="The Strokes" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">The Strokes</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/80/80?random=20" alt="Royal Blood" class="w-20 h-20 object-cover pb-1 hover:scale-105 transition-all hover:cursor-pointer rounded-full">
+                        <h3 class="text-sm">Royal Blood</h3>
+                        <h4 class="text-xs text-gray-400">Band</h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="player"></div>
+    <div id="player" class="h-64 w-full border "></div>
 </body>
 </html>
