@@ -114,153 +114,180 @@ document.addEventListener('DOMContentLoaded', function() {
 // Music Player Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const audio = document.getElementById('audio-element');
-    const playPauseBtn = document.getElementById('play-pause-btn');
-    const playPauseBtnMobile = document.getElementById('play-pause-btn-mobile');
-    const prevBtn = document.getElementById('prev-btn');
-    const prevBtnMobile = document.getElementById('prev-btn-mobile');
-    const nextBtn = document.getElementById('next-btn');
-    const nextBtnMobile = document.getElementById('next-btn-mobile');
+    const playPauseBtns = [
+        document.getElementById('play-pause-btn'),
+        document.getElementById('play-pause-btn-mobile')
+    ];
+    const prevBtns = [
+        document.getElementById('prev-btn'),
+        document.getElementById('prev-btn-mobile')
+    ];
+    const nextBtns = [
+        document.getElementById('next-btn'),
+        document.getElementById('next-btn-mobile')
+    ];
     const progressContainer = document.getElementById('progress-container');
     const progressBar = document.getElementById('progress-bar');
-    const currentTimeEl = document.getElementById('current-time');
-    const durationEl = document.getElementById('duration');
-    const songTitle = document.querySelector('#music-player h4');
-    const artistName = document.querySelector('#music-player p');
-    
+    const currentTimeSpan = document.getElementById('current-time');
+    const durationSpan = document.getElementById('duration');
+
     let isPlaying = false;
     let currentSongIndex = 0;
-    
-    // Playlist com as músicas
-    const playlist = [
+
+    // Lista de músicas
+    const songs = [
         {
             src: '/music/Izzie-dancing-queen.mp3',
             title: 'Dancing Queen',
             artist: 'Izzie Naylor',
-            cover: '/assets/izzie.png'
+            image: '/assets/izzie.png'
         },
         {
             src: '/music/Izzie-yellow-coldplay.mp3',
             title: 'Yellow',
             artist: 'Izzie Naylor',
-            cover: '/assets/izzie.png'
+            image: '/assets/izzie.png'
         },
         {
             src: '/music/izzie-remember-me.mp3',
             title: 'Remember Me',
             artist: 'Izzie Naylor',
-            cover: '/assets/izzie.png'
+            image: '/assets/izzie.png'
         }
     ];
-    
-    // Função para carregar uma música
+
+    // Função para carregar música
     function loadSong(index) {
-        const song = playlist[index];
+        const song = songs[index];
         audio.src = song.src;
-        songTitle.textContent = song.title;
-        artistName.textContent = song.artist;
         
-        // Atualizar a imagem se necessário
-        const coverImg = document.querySelector('#music-player img');
-        coverImg.src = song.cover;
-        coverImg.alt = `${song.artist} - ${song.title}`;
+        // Atualizar interface
+        const img = document.querySelector('#music-player img');
+        const title = document.querySelector('#music-player h4');
+        const artist = document.querySelector('#music-player p');
         
-        // Reset progress
-        progressBar.style.width = '0%';
-        currentTimeEl.textContent = '0:00';
-        durationEl.textContent = '0:00';
+        if (img) img.src = song.image;
+        if (title) title.textContent = song.title;
+        if (artist) artist.textContent = song.artist;
+        
+        console.log('🎵 Música carregada:', song.title);
     }
-    
-    // Função para sincronizar botões play/pause
-    function updatePlayPauseButtons(playing) {
-        const icon = playing ? '<i class="fas fa-pause text-sm"></i>' : '<i class="fas fa-play text-sm"></i>';
-        const iconMobile = playing ? '<i class="fas fa-pause text-xs"></i>' : '<i class="fas fa-play text-xs"></i>';
-        
-        if (playPauseBtn) playPauseBtn.innerHTML = icon;
-        if (playPauseBtnMobile) playPauseBtnMobile.innerHTML = iconMobile;
-    }
-    
-    // Carregar primeira música
-    loadSong(currentSongIndex);
-    
-    // Play/Pause functionality for both buttons
+
+    // Função para tocar/pausar
     function togglePlayPause() {
         if (isPlaying) {
             audio.pause();
+            playPauseBtns.forEach(btn => {
+                if (btn) {
+                    const icon = btn.querySelector('i');
+                    if (icon) icon.className = 'fas fa-play text-xs sm:text-sm xl:text-base';
+                }
+            });
             isPlaying = false;
+            console.log('⏸️ Música pausada');
         } else {
-            audio.play();
-            isPlaying = true;
+            audio.play().then(() => {
+                playPauseBtns.forEach(btn => {
+                    if (btn) {
+                        const icon = btn.querySelector('i');
+                        if (icon) icon.className = 'fas fa-pause text-xs sm:text-sm xl:text-base';
+                    }
+                });
+                isPlaying = true;
+                console.log('▶️ Música tocando');
+            }).catch(error => {
+                console.error('❌ Erro ao tocar música:', error);
+            });
         }
-        updatePlayPauseButtons(isPlaying);
     }
-    
-    if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlayPause);
-    if (playPauseBtnMobile) playPauseBtnMobile.addEventListener('click', togglePlayPause);
-    
-    // Update progress bar
-    audio.addEventListener('timeupdate', () => {
-        if (audio.duration) {
-            const progressPercent = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = progressPercent + '%';
-            
-            currentTimeEl.textContent = formatTime(audio.currentTime);
-        }
-    });
-    
-    // Set duration when loaded
-    audio.addEventListener('loadedmetadata', () => {
-        durationEl.textContent = formatTime(audio.duration);
-    });
-    
-    // Click on progress bar to seek
-    progressContainer.addEventListener('click', (e) => {
-        const clickX = e.offsetX;
-        const width = progressContainer.offsetWidth;
-        const duration = audio.duration;
-        
-        audio.currentTime = (clickX / width) * duration;
-    });
-    
-    // Format time helper function
-    function formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-    }
-    
-    // Previous button functionality for both buttons
-    function previousSong() {
-        currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+
+    // Função para música anterior
+    function prevSong() {
+        currentSongIndex = currentSongIndex > 0 ? currentSongIndex - 1 : songs.length - 1;
         loadSong(currentSongIndex);
-        
         if (isPlaying) {
             audio.play();
         }
+        console.log('⏮️ Música anterior:', songs[currentSongIndex].title);
     }
-    
-    if (prevBtn) prevBtn.addEventListener('click', previousSong);
-    if (prevBtnMobile) prevBtnMobile.addEventListener('click', previousSong);
-    
-    // Next button functionality for both buttons
+
+    // Função para próxima música
     function nextSong() {
-        currentSongIndex = (currentSongIndex + 1) % playlist.length;
+        currentSongIndex = currentSongIndex < songs.length - 1 ? currentSongIndex + 1 : 0;
         loadSong(currentSongIndex);
-        
         if (isPlaying) {
             audio.play();
         }
+        console.log('⏭️ Próxima música:', songs[currentSongIndex].title);
     }
-    
-    if (nextBtn) nextBtn.addEventListener('click', nextSong);
-    if (nextBtnMobile) nextBtnMobile.addEventListener('click', nextSong);
-    
-    // Auto next when song ends
-    audio.addEventListener('ended', () => {
-        currentSongIndex = (currentSongIndex + 1) % playlist.length;
-        loadSong(currentSongIndex);
-        
-        if (isPlaying) {
-            audio.play();
-        }
+
+    // Event listeners para botões
+    playPauseBtns.forEach(btn => {
+        if (btn) btn.addEventListener('click', togglePlayPause);
     });
+
+    prevBtns.forEach(btn => {
+        if (btn) btn.addEventListener('click', prevSong);
+    });
+
+    nextBtns.forEach(btn => {
+        if (btn) btn.addEventListener('click', nextSong);
+    });
+
+    // Barra de progresso clicável
+    if (progressContainer) {
+        progressContainer.addEventListener('click', function(e) {
+            const containerWidth = progressContainer.offsetWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            
+            if (duration) {
+                const newTime = (clickX / containerWidth) * duration;
+                audio.currentTime = newTime;
+                console.log('⏯️ Tempo alterado para:', formatTime(newTime));
+            }
+        });
+    }
+
+    // Atualizar barra de progresso
+    if (audio) {
+        audio.addEventListener('timeupdate', function() {
+            if (audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                if (progressBar) progressBar.style.width = progress + '%';
+                if (currentTimeSpan) currentTimeSpan.textContent = formatTime(audio.currentTime);
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', function() {
+            if (durationSpan) durationSpan.textContent = formatTime(audio.duration);
+        });
+
+        // Auto-play próxima música quando terminar
+        audio.addEventListener('ended', function() {
+            nextSong();
+        });
+
+        // Auto-play quando a página carregar
+        audio.addEventListener('canplaythrough', function() {
+            if (!isPlaying) {
+                console.log('🚀 Iniciando reprodução automática...');
+                togglePlayPause();
+            }
+        }, { once: true });
+    }
+
+    // Função para formatar tempo
+    function formatTime(time) {
+        if (isNaN(time)) return '0:00';
+        
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Inicializar com a primeira música
+    loadSong(currentSongIndex);
+    
+    console.log('🎵 Music Player inicializado com auto-play');
 });
